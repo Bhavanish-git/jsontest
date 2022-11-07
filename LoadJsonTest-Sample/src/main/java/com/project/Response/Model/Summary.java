@@ -1,17 +1,27 @@
 
 package com.project.Response.Model;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 
 public class Summary {
 
+    @SerializedName("casesRead")
+    @Expose
     private Integer casesRead;
+    @SerializedName("casesProcessed")
+    @Expose
     private Integer casesProcessed;
+    @SerializedName("casesIgnored")
+    @Expose
     private Integer casesIgnored;
+    @SerializedName("processorDurationSec")
+    @Expose
     private Integer processorDurationSec;
+    @SerializedName("processorCasesPerSec")
+    @Expose
     private Integer processorCasesPerSec;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Integer getCasesRead() {
         return casesRead;
@@ -51,14 +61,6 @@ public class Summary {
 
     public void setProcessorCasesPerSec(Integer processorCasesPerSec) {
         this.processorCasesPerSec = processorCasesPerSec;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }

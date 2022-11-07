@@ -1,21 +1,31 @@
 package com.project.Controller;
 
 import java.net.URI;
+import java.util.List;
 
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import com.project.model.Example;
+
+import com.google.gson.Gson;
+import com.project.model.CaseRequest;
+import com.project.dbConnect.POJO;
+import com.project.dbConnect.service;
+
 
 @RestController
 public class Controller {
 	
 	String status="";
+	Gson gson = new Gson();
+	
 	
 	/*passing list of json object  */
 	
@@ -23,25 +33,49 @@ public class Controller {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     
-        public String saveMultipleUsers(@RequestBody Example status) throws Exception {
+    public String saveMultipleUsers(@RequestBody CaseRequest status) throws Exception {
+    	
+    	Gson gson = new Gson();
+    	String json = gson.toJson(status);
        
-    	JSONObject obj=new JSONObject(status);
+    	System.out.println("request--------->"+json);
     	RestTemplate restTemplate2 = new RestTemplate();
 
-    	//String urlString2 = "http://127.0.0.1:8080/addUsers";
-    	
     	String urlString2 = "https://cholamandalam--tst1.custhelp.com/determinations-server/batch/12.2.7/policy-models/NEWSAMPLEPROJECT/assessor/";
         URI uri = new URI(urlString2);
     	
     	HttpHeaders headers2 = new HttpHeaders();
     	headers2.setContentType(MediaType.APPLICATION_JSON);
 
-    	HttpEntity<String> entity2 = new HttpEntity<String>(obj.toString(),headers2);
+    	HttpEntity<String> entity2 = new HttpEntity<String>(json,headers2);
     	String answer = restTemplate2.postForObject(uri, entity2, String.class);
     	System.out.println(answer);
 		return answer;
-    	
-    	/*====================================  working code for get method  =====================================================
+    }
+    
+   // ==========================================JDBC=====================================
+    
+     @Autowired(required = true)
+        service temp;
+    
+    @GetMapping("/data")
+		public List<POJO> table() {
+		return  temp.Data();		
+	}
+   
+	@RequestMapping("/hello")
+		public String hey() {
+			return temp.hello();
+		}
+		
+	//============================================JPA================================
+		
+	
+    
+   
+
+
+    /*====================================  working code for get method  =====================================================
     			
     	ResponseEntity<String> responseEntity = null ;
     	
@@ -55,7 +89,7 @@ public class Controller {
     	     
     	return result;
     	
-    	==========================================================================================================================*/
-    }
+    ==========================================================================================================================*/
+    
 
 }

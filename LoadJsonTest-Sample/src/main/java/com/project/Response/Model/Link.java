@@ -1,16 +1,20 @@
 
 package com.project.Response.Model;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Link {
 
+    @SerializedName("rel")
+    @Expose
     private String rel;
+    @SerializedName("href")
+    @Expose
     private String href;
+    @SerializedName("profile")
+    @Expose
     private String profile;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public String getRel() {
         return rel;
@@ -34,14 +38,6 @@ public class Link {
 
     public void setProfile(String profile) {
         this.profile = profile;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }
