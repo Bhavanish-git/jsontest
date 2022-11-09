@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -19,9 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 import com.project.model.Case;
 import com.project.model.CaseRequest;
-import com.project.dbConnect.POJO;
 import com.project.dbConnect.service;
-import com.project.model.CaseRequest;
 
 
 @RestController
@@ -35,11 +34,11 @@ public class Controller {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     
-    public String saveMultipleUsers(@RequestBody String json) throws Exception {
+    public String Request(@RequestBody String json) throws Exception {
     	
     	
        
-    	System.out.println("request--------->"+json);
+    	//System.out.println("request--------->"+json);
     	RestTemplate restTemplate2 = new RestTemplate();
 
     	String urlString2 = "https://cholamandalam--tst1.custhelp.com/determinations-server/batch/12.2.7/policy-models/NEWSAMPLEPROJECT/assessor/";
@@ -50,7 +49,39 @@ public class Controller {
 
     	HttpEntity<String> entity2 = new HttpEntity<String>(json,headers2);
     	String answer = restTemplate2.postForObject(uri, entity2, String.class);
-    	System.out.println(answer);
+    	System.out.println("answer -----------> "+answer);
+    	
+    	
+		//String ans = restTemplate2.postForObject(uri, entity2, String.class) ;
+    	
+    	//JSONObject json1=new JSONObject(answer);
+    	
+    	//JSONArray jarray=json1.getJSONArray("cases");
+    	//System.out.println("::::"+jarray);
+    	
+    	JSONObject jsonObj = new JSONObject(answer);
+
+    	JSONArray ja_data = jsonObj.getJSONArray("cases");
+    	
+    	//int length = jsonObj.length();
+    	//System.out.println("Length  = "+length);
+    	
+    	//for(int i=0; i<length-2; i++) {
+    		
+    	  JSONObject jsonObj1 = ja_data.getJSONObject(0);
+    	  JSONArray ja = jsonObj1.getJSONArray("statusentity");
+    	  int len = ja.length();
+
+    	  ArrayList<String> id_status = new ArrayList<>();
+    	  System.out.println("Len  = "+len);
+    	  for(int j=0; j<len; j++) {
+    	    JSONObject jsonz = ja.getJSONObject(j);
+    	    System.out.println(jsonz);
+    	    id_status.add(jsonz.getString("ACTIVE_STATUS"));
+    	    
+    	  }
+    	 
+    //	}
 		return answer;
     }
     
@@ -80,20 +111,14 @@ public class Controller {
     	
     	
 		try {
-			apiResponse=  saveMultipleUsers(json);
+			apiResponse=  Request(json);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			apiResponse="";
 		}
 		return apiResponse;		
 	}
-   
-	
-	@RequestMapping("/hiii")
-	public String welcome() {
-		return "welcome ";
-	}
+  
 		
 	//============================================  JPA    ================================
 		

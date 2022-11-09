@@ -37,8 +37,6 @@ public class service {
 				
 				for (POJO obj:data)
 				{
-					System.out.println("list : "+obj.getagreement_no()+" "+obj.getZONE());
-
 					Statusentity entity=new Statusentity(obj.getagreement_no(), obj.getZONE());
 					statusEntityList.add(entity);
 					
